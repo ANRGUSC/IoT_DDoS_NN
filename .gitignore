@@ -127,3 +127,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Other
+
+.idea
+__pycache__
+source_code/Output
+
+source_code/N_BaIoT/**/
+source_code/nn_model_analysis/**/
+source_code/pre_process/**/
+source_code/nn_training_lstm/**/
+source_code/nn_training_autoencoder/**/
+source_code/nn_training_cnn/**/
+source_code/nn_training_dense/**/
