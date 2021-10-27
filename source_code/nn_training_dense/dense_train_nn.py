@@ -46,7 +46,7 @@ def upsample_dataset(X, y, num_labels):
 def get_train_dataset_input_output(data, num_labels, time_window, scaler_save_path):
     temp = data.drop(columns=["TIME", "NODE", "BEGIN_DATE", "END_DATE", "NUM_NODES", "ATTACK_RATIO", "ATTACK_DURATION",
                               "ATTACK_PARAMETER"])
-    temp = data[["ACTIVE_now", "PACKET_now", "ATTACKED"]]
+    temp = data[["ACTIVE", "PACKET", "ATTACKED"]]
     X = temp.iloc[:,0:-num_labels]
     y = temp.iloc[:,-num_labels:]
     X = np.asarray(X).astype(np.float)
@@ -70,7 +70,7 @@ def get_train_dataset_input_output(data, num_labels, time_window, scaler_save_pa
                 if temp.shape[0] == 0:
                     continue
                 temp = temp.sort_values(by=["TIME"]).reset_index(drop=True)
-                temp = temp[["ACTIVE_now", "PACKET_now", "ATTACKED"]]
+                temp = temp[["ACTIVE", "PACKET", "ATTACKED"]]
                 X = temp.iloc[:,0:-num_labels]
                 y = temp.iloc[:,-num_labels:]
                 X = np.asarray(X).astype(np.float)
@@ -106,7 +106,7 @@ def get_test_dataset_input_output(data, num_labels, time_window, scaler):
                 if temp.shape[0] == 0:
                     continue
                 temp = temp.sort_values(by=["TIME"]).reset_index(drop=True)
-                temp = temp[["ACTIVE_now", "PACKET_now", "ATTACKED"]]
+                temp = temp[["ACTIVE", "PACKET", "ATTACKED"]]
                 X = temp.iloc[:, 0:-num_labels]
                 y = temp.iloc[:, -num_labels:]
                 X = np.asarray(X).astype(np.float)
@@ -252,7 +252,7 @@ def plot_logs(logs_path, output_path):
 
 
 def main_plot_logs(k_list):
-    all_saved_models_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output/saved_model/*"
+    all_saved_models_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/Output/saved_model/*"
     for directory in glob.glob(all_saved_models_path):
         print(directory)
         logs_path = directory + "/logs/logs.csv"
@@ -270,7 +270,7 @@ def main_train_model(k_list):
     test_dataset_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/test_data/test_data.csv"
     train_dataset_all = load_dataset(train_dataset_path)
     test_dataset_all = load_dataset(test_dataset_path)
-    initial_model_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output/initial_model/"
+    initial_model_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/Output/initial_model/"
     prepare_output_directory(initial_model_path)
 
     num_labels = 1
@@ -280,7 +280,7 @@ def main_train_model(k_list):
     model = create_nn_model(X_train.shape[1], y_train.shape[1])
     model.save(initial_model_path)
 
-    model_output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output/saved_model/"
+    model_output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/Output/saved_model/"
     prepare_output_directory(model_output_path)
 
     nodes = list(train_dataset_all["NODE"].unique())
@@ -314,7 +314,6 @@ def main_train_model(k_list):
         model.save(saved_model_path + "final_model")
 
         #break
-
 
 
 if __name__ == "__main__":

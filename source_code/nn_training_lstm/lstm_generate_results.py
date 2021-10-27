@@ -63,7 +63,7 @@ def get_input_target(data, num_labels, time_window, scaler):
                 continue
             temp = temp.sort_values(by=["TIME"]).reset_index(drop=True)
             df_out = df_out.append(temp.iloc[time_window-1:, :])
-            temp = temp[["ACTIVE_now", "PACKET_now", "ATTACKED"]]
+            temp = temp[["ACTIVE", "PACKET", "ATTACKED"]]
             X = temp.iloc[:, 0:-num_labels]
             y = temp.iloc[:, -num_labels:]
             X = np.asarray(X).astype(np.float)
@@ -361,11 +361,11 @@ def main_general_report(metric, mode, k_list, time_window):
     """
     train_dataset_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/train_data/train_data.csv"
     test_dataset_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/test_data/test_data.csv"
-    model_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/saved_model/"
+    model_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/saved_model/"
     train_dataset = load_dataset(train_dataset_path)
     test_dataset = load_dataset(test_dataset_path)
 
-    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/report/"
+    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/report/"
 
     generate_general_report(train_dataset, test_dataset, model_path, time_window, k_list, metric, mode, output_path)
 
@@ -387,8 +387,8 @@ def main_generate_attack_prediction_vs_time(metric, mode, k_list, time_window):
     train_dataset = load_dataset(train_dataset_path)
     test_dataset = load_dataset(test_dataset_path)
 
-    model_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/saved_model/"
-    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/attack_prediction_vs_time/data/"
+    model_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/saved_model/"
+    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/attack_prediction_vs_time/data/"
 
     generate_attack_prediction_vs_time(model_path, train_dataset, test_dataset, time_window, k_list, metric, mode, output_path)
 
@@ -404,13 +404,13 @@ def main_plot_attack_prediction_vs_time(metric, mode, k_list):
     Returns:
         --
     """
-    train_output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/attack_prediction_vs_time/plot/train/"
-    test_output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/attack_prediction_vs_time/plot/test/"
+    train_output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/attack_prediction_vs_time/plot/train/"
+    test_output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/attack_prediction_vs_time/plot/test/"
     prepare_output_directory(train_output_path)
     prepare_output_directory(test_output_path)
 
-    train_result_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/attack_prediction_vs_time/data/train_result_" + metric + '_' + mode + ".csv"
-    test_result_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/attack_prediction_vs_time/data/test_result_" + metric + '_' + mode + ".csv"
+    train_result_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/attack_prediction_vs_time/data/train_result_" + metric + '_' + mode + ".csv"
+    test_result_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/attack_prediction_vs_time/data/test_result_" + metric + '_' + mode + ".csv"
 
     plot_attack_prediction_vs_time(train_result_path, test_result_path, train_output_path, test_output_path, k_list)
 
@@ -425,10 +425,10 @@ def main_plot_metric_vs_attack_parameter(metric, mode):
     Returns:
         --
     """
-    mean_report_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/report/mean_report_" + metric + '_' + mode + ".csv"
+    mean_report_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/report/mean_report_" + metric + '_' + mode + ".csv"
     mean_report = pd.read_csv(mean_report_path)
 
-    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output/attack_vs_k/"
+    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/attack_vs_k/"
     prepare_output_directory(output_path)
 
     plot_metric_vs_attack_parameter(mean_report, output_path)

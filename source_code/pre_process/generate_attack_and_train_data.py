@@ -1,5 +1,6 @@
 import math
 import sys
+import glob
 import os
 import pandas as pd
 import numpy as np
@@ -34,6 +35,22 @@ def load_dataset(path):
     data = pd.read_csv(path)
     data["TIME"] = pd.to_datetime(data["TIME"])
     return data
+
+
+def combine_data(input_path, output_path):
+    """Combine the csv files in the input_path directory and output the combined one to the output_path.
+
+    Keyword arguments:
+    input_path -- The path to the input directory.
+    output_path -- The path to the output_directory for storing the combined data.
+    """
+    training_data = pd.DataFrame()
+    for fname in glob.glob(input_path):
+        print(fname)
+        temp = pd.read_csv(fname)
+        training_data = training_data.append(temp)
+    prepare_output_directory(output_path)
+    training_data.to_csv(output_path, index=False)
 
 
 def generate_attack_train(benign_data, attack_begin_date, attack_end_date, attacked_ratio_nodes, attack_duration,
@@ -81,11 +98,6 @@ def generate_attack_train(benign_data, attack_begin_date, attack_end_date, attac
 
         benign_data.loc[select_rows, "ACTIVE"] = 1
         benign_data.loc[select_rows, "ATTACKED"] = 1
-        #packet = np.array(
-        #    cauchy.rvs(loc=attack_packet_cauchy[0], scale=attack_packet_cauchy[1], size=benign_data.loc[select_rows].shape[0]))
-        #packet = np.ceil(packet)
-        #packet[packet <= 0] = 0
-        #packet[packet >= attack_packet_cauchy[2]] = attack_packet_cauchy[2]
         packet_dist = tfp.substrates.numpy.distributions.TruncatedCauchy(loc=attack_packet_cauchy[0],
                                                                          scale=attack_packet_cauchy[1],
                                                                          low=0,
@@ -182,6 +194,22 @@ def main_generate_attack(benign_dataset_path, data_type, num_train_days, num_tes
         p.join()
 
 
+def main_combine_data(data_type):
+    """The main function to be used for calling  combine_data function.
+
+    Keyword arguments:
+    data_type -- could be "train" or "test". For the test data_type, we select the attacked nodes in the way that
+                higher ratio attacked nodes contain the lower ratio attacked nodes.
+    """
+    if data_type == "train":
+        input_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/attacked_data/train/*.csv"
+        output_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/train_data/train_data.csv"
+    else:
+        input_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/attacked_data/test/*.csv"
+        output_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/test_data/test_data.csv"
+
+    combine_data(input_path, output_path)
+
 if __name__ == "__main__":
     benign_dataset_path = CONFIG.OUTPUT_DIRECTORY + "pre_process/Output/benign_data/benign_data_2021-01-02 00:00:00_2021-02-01 23:59:58_time_step_30_num_ids_20.csv"
     num_train_days = 1
@@ -190,6 +218,8 @@ if __name__ == "__main__":
     k_list = np.array([0, 0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 1])
 
     main_generate_attack(benign_dataset_path, "train", num_train_days, num_test_days, k_list, time_step)
+    main_combine_data("train")
     print("generate train data done.")
     main_generate_attack(benign_dataset_path, "test", num_train_days, num_test_days, k_list, time_step)
+    main_combine_data("test")
     print("generate test data done.")
