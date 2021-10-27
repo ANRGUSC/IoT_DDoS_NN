@@ -99,61 +99,15 @@ def main_plot_compare_current(metric, mode):
     metric -- the metric for comparing the NN models like binary accuracy, recall
     mode -- the mode for the selected metric
     """
-    mean_report_path = [CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_cnn/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_autoencoder/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv"]
+    mean_report_path = [CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/Output/report/mean_report_" + metric + '_' + mode + ".csv",
+                        CONFIG.OUTPUT_DIRECTORY + "nn_training_cnn/Output/report/mean_report_" + metric + '_' + mode + ".csv",
+                        CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/Output/report/mean_report_" + metric + '_' + mode + ".csv",
+                        CONFIG.OUTPUT_DIRECTORY + "nn_training_autoencoder/Output/report/mean_report_" + metric + '_' + mode + ".csv"]
     mean_report_legends = {0: 'MLP', 1: 'CNN', 2: 'LSTM', 3: 'AEN'}
-    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_model_analysis/Output/compare_model/compare_model_with_upsample_"
+    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_model_analysis/Output/compare_model/"
     prepare_output_directory(output_path)
     plot_metric_vs_attack_parameter(mean_report_path, mean_report_legends, output_path)
 
-
-    mean_report_path = [CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_cnn/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_autoencoder/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv"]
-    mean_report_legends = {0: 'MLP', 1: 'CNN', 2: 'LSTM', 3: 'AEN'}
-    output_path = CONFIG.OUTPUT_DIRECTORY + "nn_model_analysis/Output/compare_model/compare_model_without_upsample_"
-    plot_metric_vs_attack_parameter(mean_report_path, mean_report_legends, output_path)
-
-
-def main_average_accuracy_recall(metric, mode):
-    mean_report_path_list = [CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                              CONFIG.OUTPUT_DIRECTORY + "nn_training_cnn/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                              CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                              CONFIG.OUTPUT_DIRECTORY + "nn_training_autoencoder/current_features_aggregate_all_k/Output_with_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv"]
-    mean_report_legends = {0: 'MLP', 1: 'CNN', 2: 'LSTM', 3: 'AEN'}
-
-    for i, mean_report_path in enumerate(mean_report_path_list):
-        mean_report = pd.read_csv(mean_report_path)
-        print(mean_report_legends[i], " - With Upsample - Binary Accuracy Train (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "binary_accuracy"].values[0] ,2))
-        print(mean_report_legends[i], " - With Upsample - Binary Accuracy Train (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "binary_accuracy"].values[0] ,2))
-        print(mean_report_legends[i], " - With Upsample - Binary Accuracy Test (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "val_binary_accuracy"].values[0], 2))
-        print(mean_report_legends[i], " - With Upsample - Binary Accuracy Test (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "val_binary_accuracy"].values[0], 2))
-        print(mean_report_legends[i], " - With Upsample - Recall Train (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "recall"].values[0], 2))
-        print(mean_report_legends[i], " - With Upsample - Recall Train (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "recall"].values[0], 2))
-        print(mean_report_legends[i], " - With Upsample - Recall Test (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "val_recall"].values[0], 2))
-        print(mean_report_legends[i], " - With Upsample - Recall Test (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "val_recall"].values[0], 2))
-
-    print("**************************************************************")
-
-    mean_report_path_list = [CONFIG.OUTPUT_DIRECTORY + "nn_training_dense/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_cnn/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_lstm/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv",
-                        CONFIG.OUTPUT_DIRECTORY + "nn_training_autoencoder/current_features_aggregate_all_k/Output_without_upsample_test/report/mean_report_" + metric + '_' + mode + ".csv"]
-    mean_report_legends = {0: 'MLP', 1: 'CNN', 2: 'LSTM', 3: 'AEN'}
-
-    for i, mean_report_path in enumerate(mean_report_path_list):
-        mean_report = pd.read_csv(mean_report_path)
-        print(mean_report_legends[i], " - Without Upsample - Binary Accuracy Train (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "binary_accuracy"].values[0] ,2))
-        print(mean_report_legends[i], " - Without Upsample - Binary Accuracy Train (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "binary_accuracy"].values[0] ,2))
-        print(mean_report_legends[i], " - Without Upsample - Binary Accuracy Test (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "val_binary_accuracy"].values[0], 2))
-        print(mean_report_legends[i], " - Without Upsample - Binary Accuracy Test (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "val_binary_accuracy"].values[0], 2))
-        print(mean_report_legends[i], " - Without Upsample - Recall Train (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "recall"].values[0], 2))
-        print(mean_report_legends[i], " - Without Upsample - Recall Train (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "recall"].values[0], 2))
-        print(mean_report_legends[i], " - Without Upsample - Recall Test (k=0): ", round(mean_report.loc[mean_report["k"] == 0, "val_recall"].values[0], 2))
-        print(mean_report_legends[i], " - Without Upsample - Recall Test (k=1): ", round(mean_report.loc[mean_report["k"] == 1, "val_recall"].values[0], 2))
 
 def main():
     seed = 1
@@ -164,7 +118,7 @@ def main():
     mode = "max"
 
     main_plot_compare_current(metric, mode)
-    main_average_accuracy_recall(metric, mode)
+
 
 if __name__ == "__main__":
     main()
