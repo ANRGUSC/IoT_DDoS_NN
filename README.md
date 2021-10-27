@@ -14,7 +14,7 @@ The project config file can be found in [/source_code](https://github.com/ANRGUS
 
 ## Preprocess the dataset and generate training dataset
 
-Before running any code, the original dataset need to be unzip in the [/dataset directory](https://github.com/ANRGUSC/IoT_DDoS_NN/tree/main/dataset). Two python scripts can be found in [/source_code/clean_dataset](https://github.com/ANRGUSC/IoT_DDoS_NN/tree/main/source_code/clean_dataset) folder for pre-processing the original dataset and also generating the training/testing dataset. 
+Before running any code, the original dataset need to be unzip in the [/dataset directory](https://github.com/ANRGUSC/IoT_DDoS_NN/tree/main/dataset). Two python scripts can be found in [/source_code/pre_process](https://github.com/ANRGUSC/IoT_DDoS_NN/tree/main/source_code/pre_process) folder for pre-processing the original dataset and also generating the training/testing dataset. 
 
 ### clean_dataset.py
 
@@ -37,6 +37,7 @@ This script genrates the attacked dataset by considering the ratio of the nodes 
 Input:
 - Bening dataset
 - Benign packet truncated Cauchy distribution parameters
+- Attack packet distribution parameter (k)
 - Number of attack days
 - Attack ratio
 - Attack duration
@@ -50,7 +51,7 @@ Output:
 
 ## Training neural network
 
-Two python scripts can be found in /source_code/nn_training_"model" folders to train a different neural network "model"s and generate results. "model" could be dense, cnn, lstm, autoencoder.
+Two python scripts can be found in /source_code/nn_training_"model" folders to train different neural network "model"s and generate results. "model" could be dense, cnn, lstm, and autoencoder.
 
 
 ### train_nn_"model".py
